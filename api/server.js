@@ -8,7 +8,7 @@ const server =express()
 server.use(express.json())
 
 server.get("/api/users",(req,res) =>{
-    User.findAll()
+    User.find()
     .then(users =>{
         console.log(users)
         res.status(200).json(users)
@@ -42,7 +42,7 @@ server.post("/api/users",(req,res) =>{
     if(!newUser.name || !newUser.bio){
         res.status(422).json("Error Name and Bio required")
     }else{
-        User.create(newUser)
+        User.insert(newUser)
         .then(dog =>{
             res.status(201).json(dog)
         })
@@ -78,7 +78,7 @@ server.put("/api/users/:id", async (req,res) =>{
 server.delete("/api/users/:id", async (req,res) =>{
     try{
         const {id} = req.params
-        const deletedUser = await User.delete(id)
+        const deletedUser = await User.remove(id)
         res.status(200).json(deleteUser)
     }catch(err){
         res.status(500).json({message:err.message})
@@ -89,4 +89,4 @@ server.use("*", (req,res) =>{
     res.status(404).json({message:"404 Not Found!!!"})
 })
 
-module.exports = {}; // EXPORT YOUR SERVER instead of {}
+module.exports = server // EXPORT YOUR SERVER instead of {}
